@@ -4,6 +4,7 @@
 #include "ParallaxBackGround.h"
 #include "ParallaxLayer.h"
 #include "CutScene.h"
+#include "CreditsState.h"
 
 LevelManager::LevelManager(Game* game, Player* player, GameObject* level, BulletPool* enemyPool) : _game(game), _player(player), _level(level), _enemyBulletPool(enemyPool)
 {
@@ -112,6 +113,7 @@ void LevelManager::setLevel(int l)
 		_game->getSoundManager()->playMusic("safe_zone", -1);
 
 		cutscene = new CutScene(_player);
+		_player->setBank(2000);
 
 		cutscene->addMoveEvent(_player->getComponent<BodyComponent>(), 1, 15, 512 / M_TO_PIXEL);
 		cutscene->addDialogueEvent(dialogue, _game->getDialogue("Azura 2-1"));
@@ -215,6 +217,7 @@ void LevelManager::setLevel(int l)
 
 		break;
 	case LevelManager::End:
+
 		_currentSafeZone = new Map(TILEMAPS_PATH + "Final.json", _game, _player, _game->getTexture("TilesetBoss3"), _enemyBulletPool);
 		setBackground();
 		_game->getSoundManager()->playMusic("endGame");
@@ -233,7 +236,7 @@ void LevelManager::setLevel(int l)
 		_game->getCurrentState()->addCutScene(cutscene);
 
 		cutscene->play();
-
+		
 		break;
 
 		//Demo Guerrilla Game Festival

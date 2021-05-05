@@ -1,5 +1,6 @@
 #include "Laser.h"
 #include "Game.h"
+#include "Tracker.h"
 
 Laser::Laser(Game* g, Vector2D pos, Texture* texture, Player* player, double damage) : GameObject(g, "Laser"), _damage(damage), _pos(pos), _player(player)
 {
@@ -14,6 +15,7 @@ Laser::Laser(Game* g, Vector2D pos, Texture* texture, Player* player, double dam
 	_anim->addAnim(AnimatedSpriteComponent::LaserWarning, 1, true);
 
 	setActive(false);
+	_idAttack = "Laser";
 }
 
 void Laser::update(double deltaTime)
@@ -37,6 +39,12 @@ void Laser::Shoot()
 {
 	_anim->playAnim(AnimatedSpriteComponent::LaserShooting);
 	b2Vec2 _pos = b2Vec2(_transform->getPosition().getX() / M_TO_PIXEL, _transform->getPosition().getY() / M_TO_PIXEL);
+
+	Tracker* tracker = Tracker::getInstance();
+
+	std::map<string, string> prop;
+	prop.insert(pair<string, string>("BossAttackType", _idAttack));
+	tracker->trackInstantaneousEvent("BossAttack", prop);
 
 	if (_body == nullptr)
 	{

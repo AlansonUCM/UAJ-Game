@@ -1,5 +1,5 @@
 #include "GameManager.h"
-
+#include "Tracker.h"
 GameManager GameManager::_instance;
 bool GameManager::_initilized = false;
 

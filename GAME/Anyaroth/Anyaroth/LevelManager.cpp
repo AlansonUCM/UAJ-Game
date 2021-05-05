@@ -6,6 +6,7 @@
 #include "CutScene.h"
 #include "CreditsState.h"
 
+
 LevelManager::LevelManager(Game* game, Player* player, GameObject* level, BulletPool* enemyPool) : _game(game), _player(player), _level(level), _enemyBulletPool(enemyPool)
 {
 	_camera = game->getCurrentState()->getMainCamera();
@@ -13,6 +14,8 @@ LevelManager::LevelManager(Game* game, Player* player, GameObject* level, Bullet
 
 void LevelManager::setLevel(int l)
 {
+	
+
 	CutScene* cutscene;
 	DialoguePanel* dialogue = _game->getCurrentState()->getPlayHUD()->getDialoguePanel();
 	ShopMenu* shop = _game->getCurrentState()->getPlayHUD()->getShop();

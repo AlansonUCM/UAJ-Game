@@ -9,6 +9,7 @@
 #include "ParticleManager.h"
 #include "GameManager.h"
 #include "OrbShotgun.h"
+#include "Tracker.h"
 
 
 Player::Player(Game* game) : GameObject(game, "Player")
@@ -100,7 +101,26 @@ void Player::beginCollision(GameObject * other, b2Contact* contact)
 	{
 		int damage = other->getDamage();
 		subLife(damage);
+		Tracker* tracker = Tracker::getInstance();
 
+		std::map<string, string> prop;
+		prop.insert(pair<string, string>("DamageReceive",to_string(damage)));
+		prop.insert(pair<string, string>("PlayerPos","X:"+to_string(_transform->getPosition().getX())+" Y:"+ to_string(_transform->getPosition().getY())));
+		int lvl=0;
+		
+			//LevelManager::Level lvl=
+			lvl = GameManager::getInstance()->getCurrentLevel();
+	
+		if (lvl == LevelManager::Level::Boss1 || lvl == LevelManager::Level::Boss2 || lvl == LevelManager::Level::Boss3)
+		{
+			if(other->getIdAttack()=="")
+				prop.insert(pair<string, string>("BossAttackType", "Shoot"));
+			else
+				prop.insert(pair<string, string>("BossAttackType", other->getIdAttack()));
+		}
+		prop.insert(pair<string, string>("LevelIndex",to_string(lvl)));
+
+		tracker->trackInstantaneousEvent("PlayerHit", prop);
 		BodyComponent* otherBody = other->getComponent<BodyComponent>();
 		_contactPoint = otherBody->getBody()->GetPosition() + b2Vec2(otherBody->getW() / 2, otherBody->getH() / 2);
 	}
@@ -121,7 +141,15 @@ void Player::beginCollision(GameObject * other, b2Contact* contact)
 		{
 			auto value = other->getValue();
 
-			_currentGun->addAmmo(_currentGun->getMaxClip()*value);
+			Tracker* tracker = Tracker::getInstance();
+
+			std::map<string, string> prop;
+			int totalAmmo = _currentGun->getMaxClip() * value - (_currentGun->getClip() + _currentGun->getMagazine()) + _otherGun->getMaxClip() * value - (_otherGun->getClip() + _otherGun->getMagazine());
+			prop.insert(pair<string, string>("Amount", to_string(totalAmmo)));
+			tracker->trackInstantaneousEvent("AmmoCollected", prop);
+
+
+			_currentGun->addAmmo(_currentGun->getMaxClip() * value);
 			_playerPanel->updateAmmoViewer(_currentGun->getClip(), _currentGun->getMagazine());
 
 			if (_otherGun != nullptr) _otherGun->addAmmo(_otherGun->getMaxClip()*value);
@@ -145,6 +173,21 @@ void Player::beginCollision(GameObject * other, b2Contact* contact)
 	}
 	else if (other->getTag() == "Death")
 	{
+		Tracker* tracker = Tracker::getInstance();
+
+		std::map<string, string> prop;
+		int lvl = 0;
+		
+			//LevelManager::Level lvl=
+		lvl = GameManager::getInstance()->getCurrentLevel();
+		prop.insert(pair<string, string>("PlayerPos", "X:" + to_string(_transform->getPosition().getX()) + " Y:" + to_string(_transform->getPosition().getY())));
+		if ((lvl == LevelManager::Level::Boss1 || lvl == LevelManager::Level::Boss2 || lvl == LevelManager::Level::Boss3))
+		{
+			prop.insert(pair<string, string>("BossFase", to_string(bossF)));
+			
+		}
+		prop.insert(pair<string, string>("LevelIndex", to_string(lvl)));
+		tracker->trackInstantaneousEvent("PlayerDeath", prop);
 		die();
 	}
 }

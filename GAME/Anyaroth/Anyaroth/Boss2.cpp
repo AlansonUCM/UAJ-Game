@@ -2,12 +2,13 @@
 #include "BossPoleAxe.h"
 #include "ImprovedShotgun.h"
 #include "CutScene.h"
+#include "Tracker.h"
 
 Boss2::Boss2(Game* g, Player* player, Vector2D pos, BulletPool* pool) : Boss(g, player, pos, pool, g->getTexture("AzuraBoss")), Enemy(g, player, pos, g->getTexture("AzuraBoss"), "boss2Die", "boss2Hit", "meleeEnemyHit")
 {
 	_life = 450;
 	_life1 = _life2 = _life3 = _life;
-
+	_player->setBossF(1);
 	_name = "Azura Manyu";
 
 	if (_myGun != nullptr)
@@ -82,6 +83,7 @@ void Boss2::update(double deltaTime)
 {
 	if (_game->getCurrentState()->getCutScene() == nullptr)
 	{
+		
 		Boss::update(deltaTime);
 
 		if (isDead())
@@ -118,6 +120,14 @@ void Boss2::Jump()
 	fDef.filter.maskBits = PLAYER;
 	fDef.isSensor = true;
 	setTag("Melee");
+	_idAttack = "Jump";
+
+	Tracker* tracker = Tracker::getInstance();
+
+	std::map<string, string> prop;
+	prop.insert(pair<string, string>("BossAttackType", _idAttack));
+	tracker->trackInstantaneousEvent("BossAttack", prop);
+
 	_body->addFixture(&fDef, this);
 }
 
@@ -241,6 +251,12 @@ void Boss2::meleeAttack()
 	_bodyPos = Vector2D(_body->getBody()->GetPosition().x * M_TO_PIXEL, _body->getBody()->GetPosition().y * M_TO_PIXEL);
 	int dir = (_bodyPos.getX() >= _playerPos.getX()) ? -1 : 1;
 	_melee->meleeAttack(_bodyPos.getX(), _bodyPos.getY(), dir);
+	_idAttack = "Spin";
+	Tracker* tracker = Tracker::getInstance();
+
+	std::map<string, string> prop;
+	prop.insert(pair<string, string>("BossAttackType", _idAttack));
+	tracker->trackInstantaneousEvent("BossAttack", prop);
 
 	_melee->setActive(false);
 
@@ -357,7 +373,14 @@ void Boss2::fase1(double deltaTime)
 		}
 		if (_timeWaiting > _timeToShoot && !fired)
 		{
+			_idAttack = "";
 			shoot();
+			Tracker* tracker = Tracker::getInstance();
+
+			std::map<string, string> prop;
+			prop.insert(pair<string, string>("BossAttackType", "Shoot"));
+			tracker->trackInstantaneousEvent("BossAttack", prop);
+
 			_timeWaiting = 0;
 			fired = true;
 		}
@@ -447,17 +470,20 @@ void Boss2::beetwenFases(double deltaTime)
 
 		if (_lastFase == Fase1)
 		{
+			_player->setBossF(2);
 			_lasers->Activate();
 			changeFase(Fase2);
 			_game->getSoundManager()->playSFX("boss2Die");
 		}
 		else if (_lastFase == Fase2)
 		{
+			_player->setBossF(3);
 			changeFase(Fase3);
 			_game->getSoundManager()->playSFX("boss2Die");
 		}
 		else
 		{
+
 			die();
 			_lasers->Deactivate();
 		}
@@ -507,6 +533,11 @@ void Boss2::beetwenFases(double deltaTime)
 void Boss2::manageLife(Life& l, int damage)
 {
 	l.subLife(damage);
+	Tracker* tracker = Tracker::getInstance();
+
+	std::map<string, string> prop;
+	
+	tracker->trackInstantaneousEvent("BossHit", prop);
 	if (l.getLife() == 0)
 	{
 		_doSomething = 0;

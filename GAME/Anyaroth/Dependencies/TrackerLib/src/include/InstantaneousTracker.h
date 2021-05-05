@@ -2,12 +2,13 @@
 
 #include "ITrackerAsset.h"
 #include "TrackerExports.h"
-class TRACKER_CORE_API ProgressionTracker : public ITrackerAsset
+class TRACKER_CORE_API InstantaneousTracker : public ITrackerAsset
 {
 private:
 
 public:
-	ProgressionTracker();
+	InstantaneousTracker();
 
 	bool accept(const TrackerEvent& e);
 };
+

@@ -1,43 +1,53 @@
 #pragma once
-
 #include <string>
+#include <vector>
+#include <map>
+#include "json.hpp"
+#include "TrackerExports.h"
 
-enum class EventType { Instantaneous, TimeBased, Sampling };
-enum class EventName 
-{ 
-	InitSession,
-	EndSession,
-	StartLevel,
-	EndLevel,
-	PlayerDie,
-	AmmoCollected,
-	PlayerShoot,
-	PlayerHit,
-	BossAttack,
-	BossHit
-};
+using json = nlohmann::json;
 
-class TrackerEvent
+class TRACKER_CORE_API TrackerEvent
 {
 private:
-	EventType type;
-	EventName name;
-	int sessionID;
-	float timestamp;
+	std::string gameID, sessionID, userID;
+	std::string timestamp;
+	std::string type;
+	std::string name;
+	bool checkpoint;
+
+	std::map<std::string, std::string> eventProperties;
+
+protected:
+	void generalPropertiesToJSON(json& j) const;
+	void eventPropertiesToJSON(json& j) const;
+
+	void generalPropertiesToCSV(std::string& atributes, std::string& values) const;
+	void eventPropertiesToCSV(std::string& atributes, std::string& values) const;
 
 public:
 	TrackerEvent();
 
-	void setType(EventType type);
-	void setName(EventName name);
-	void setSessionID(int sessionID);
-	void setTimestamp(float timestamp);
+	void setGameID(const std::string& game);
+	void setSessionID(const std::string& session);
+	void setUserID(const std::string& user);
+	void setTimestamp(const std::string& time);
+	void setType(const std::string& type);
+	void setName(const std::string& name);
+	void setCheckpoint(bool checkpoint);
 
-	EventType getType() const;
-	EventName getName() const;
-	int getSessionID() const;
-	float getTimestamp() const;
+	void setEventProperties(std::map<std::string, std::string> properties);
 
-	std::string toJSON() const;
-	std::string toCSV() const;
+	std::string getGameID() const;
+	std::string getSessionID() const;
+	std::string getUserID() const;
+	std::string getTimestamp() const;
+	std::string getType() const;
+	std::string getName() const;
+	bool getCheckpoint() const;
+
+	std::map<std::string, std::string>* getEventProperties();
+
+	virtual std::string toJSON() const;
+	virtual std::string toCSV() const;
 };

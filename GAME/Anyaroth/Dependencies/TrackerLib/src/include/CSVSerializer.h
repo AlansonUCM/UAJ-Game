@@ -2,8 +2,8 @@
 
 #include <string>
 #include "ISerializer.h"
-
-class CSVSerializer : public ISerializer
+#include "TrackerExports.h"
+class TRACKER_CORE_API CSVSerializer : public ISerializer
 {
 private:
 
@@ -11,6 +11,6 @@ private:
 public:
 	CSVSerializer();
 
-	virtual std::string serialize(const TrackerEvent& e);
+	virtual std::string serialize(const TrackerEvent* e);
 
 };

@@ -6,6 +6,7 @@
 #include "WeaponManager.h"
 #include "CutScene.h"
 #include "checkML.h"
+#include "Tracker.h"
 #include <json.hpp>
 
 using namespace nlohmann;
@@ -158,6 +159,12 @@ void PlayState::update(double deltaTime)
 
 	if (gameManager->getChangeLevel())
 	{
+		Tracker* tracker = Tracker::getInstance();
+		std::map<string, string> prop;
+		int ammo = _player->getCurrentGun()->getClip() + _player->getCurrentGun()->getMagazine() + _player->getOtherGun()->getClip() + _player->getOtherGun()->getMagazine();
+		prop.insert(pair<string, string>("FinalAmmo", to_string(ammo)));
+		prop.insert(pair<string, string>("LevelId",to_string( gameManager->getCurrentLevel())));
+		tracker->trackInstantaneousEvent("EndLevel", prop);
 		gameManager->setChangeLevel(false);
 
 		if (_player->isDead())
@@ -199,5 +206,11 @@ void PlayState::update(double deltaTime)
 					_cutScene->play();
 			});
 		}
+		ammo = _player->getCurrentGun()->getClip() + _player->getCurrentGun()->getMagazine() + _player->getOtherGun()->getClip() + _player->getOtherGun()->getMagazine();
+		std::map<string, string> prop2;
+		prop2.insert(pair<string, string>("InitalAmmo", to_string(ammo)));
+		prop2.insert(pair<string, string>("LevelId", to_string(gameManager->getCurrentLevel())));
+		tracker->trackInstantaneousEvent("StartLevel", prop2);
+
 	}
 }

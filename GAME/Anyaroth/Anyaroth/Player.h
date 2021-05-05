@@ -21,7 +21,7 @@ private:
 	BodyComponent* _body = nullptr;
 	CustomAnimatedSpriteComponent* _anim = nullptr;
 	Melee* _melee = nullptr;
-
+	//GameManager* manager = nullptr;
 	//Child
 	PlayerArm* _playerArm = nullptr;
 
@@ -35,7 +35,7 @@ private:
 	double _speed = 15, _gravScale = 8, _damping = 3;
 
 	int _meleeAnim = AnimatedSpriteComponent::MeleeKnife;
-
+	int bossF = 1;
 	//Jump
 	int _floorCount = 0;
 	double _jumpForce = 480;
@@ -97,6 +97,11 @@ public:
 
 	void die();
 	void revive();
+
+	//inline void setGM(GameManager* gm) { manager = gm; }
+	//inline GameManager* getGM() { return manager; }
+	inline void setBossF(int bf) { bossF = bf; }
+	inline int getBossF() { return bossF; }
 
 	void subLife(int damage);
 	inline void setNoDamage(bool b) { _noDamage = b; }

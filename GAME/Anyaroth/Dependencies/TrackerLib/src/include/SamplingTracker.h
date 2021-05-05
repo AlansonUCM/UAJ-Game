@@ -1,13 +1,13 @@
 #pragma once
-
 #include "ITrackerAsset.h"
 #include "TrackerExports.h"
-class TRACKER_CORE_API ProgressionTracker : public ITrackerAsset
+class TRACKER_CORE_API SamplingTracker : public ITrackerAsset
 {
 private:
 
 public:
-	ProgressionTracker();
+	SamplingTracker();
 
 	bool accept(const TrackerEvent& e);
 };
+

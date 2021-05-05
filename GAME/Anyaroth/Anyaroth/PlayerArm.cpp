@@ -1,6 +1,7 @@
 #include "PlayerArm.h"
 #include "Player.h"
 #include "Game.h"
+#include "Tracker.h"
 
 
 PlayerArm::PlayerArm(Game* game, Player* player, Vector2D offset) : Arm(game, player, offset), _player(player)
@@ -44,7 +45,14 @@ void PlayerArm::update(double deltaTime)
 void PlayerArm::shoot()
 {
 	if (_player->getCurrentGun()->canShoot())
+	{
+		Tracker* tracker = Tracker::getInstance();
+
+		std::map<string, string> prop;
+		tracker->trackInstantaneousEvent("PlayerShoot", prop);
+
 		_anim->playAnim(AnimatedSpriteComponent::Shoot);
+	}
 	else if (!_player->getCurrentGun()->canReload())
 		_anim->playAnim(AnimatedSpriteComponent::NoAmmo);
 }

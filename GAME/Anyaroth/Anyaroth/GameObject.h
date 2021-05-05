@@ -32,7 +32,9 @@ private:
 	bool _active = true;
 	bool _dead = false;
 	string _tag;
-
+protected:
+	string _idAttack;
+private:
 	inline void add_component(Component* c, string name) { _components[name] = c; }
 
 	template<class ComponentType>
@@ -132,6 +134,8 @@ public:
 	inline Camera* getCamera() const;
 
 	Vector2D getPositionOnCamera();
+
+	virtual string getIdAttack() const { return _idAttack; }
 
 	inline virtual int getValue() const { return -1; }
 

@@ -1,16 +1,20 @@
 #pragma once
-
 #include "TrackerEvent.h"
+#include "TrackerExports.h"
+enum class State { Started, Progressed, Finished };
 
-class ProgressionEvent : public TrackerEvent
+class  TRACKER_CORE_API ProgressionEvent : public TrackerEvent
 {
 private:
-	//enum EventType
+	State state;
 
 public:
 	ProgressionEvent();
 
-	std::string toJSON();
-	std::string toCSV();
+	void setState(int state);
 
+	int getState() const;
+
+	virtual std::string toJSON() const;
+	virtual std::string toCSV() const;
 };

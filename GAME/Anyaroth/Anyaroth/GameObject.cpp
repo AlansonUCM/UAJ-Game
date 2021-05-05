@@ -4,6 +4,7 @@
 GameObject::GameObject(Game* game, string tag) : _game(game), _inputComp(), _physicsComp(), _renderComp(), _tag(tag)
 {
 	if (game != nullptr) _world = game->getCurrentState()->getWorld();
+	_idAttack = "";
 }
 
 GameObject::~GameObject() 

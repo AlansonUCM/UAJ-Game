@@ -25,11 +25,11 @@
     <Filter Include="Archivos de origen\TrackerEvents">
       <UniqueIdentifier>{a752f541-34f7-47c7-8de9-00993540a114}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Archivos de origen\Utils">
+      <UniqueIdentifier>{e6d8d3cf-726d-43ac-9f0f-fb1900ed9025}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\include\PlayerActionTracker.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
     <ClInclude Include="src\include\ConcurrentQueue.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
@@ -69,7 +69,40 @@
     <ClInclude Include="src\include\TrackerEvent.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="src\include\BossActionTracker.h">
+    <ClInclude Include="src\include\InstantaneousEvent.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="src\include\SamplingEvent.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="src\include\TimeBasedEvent.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="src\include\md5Hash.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="src\include\machineID.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="src\include\Utils.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="src\include\InstantaneousTracker.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="src\include\SamplingTracker.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="src\include\TimeBasedTracker.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="src\include\Factory.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="src\include\httplib.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="src\include\Chrono.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>
@@ -79,9 +112,6 @@
     </ClCompile>
     <ClCompile Include="src\src\TrackerEvents\TrackerEvent.cpp">
       <Filter>Archivos de origen\TrackerEvents</Filter>
-    </ClCompile>
-    <ClCompile Include="src\src\TrackerAssets\PlayerActionTracker.cpp">
-      <Filter>Archivos de origen\TrackerAssets</Filter>
     </ClCompile>
     <ClCompile Include="src\src\TrackerAssets\ProgressionTracker.cpp">
       <Filter>Archivos de origen\TrackerAssets</Filter>
@@ -101,10 +131,37 @@
     <ClCompile Include="src\src\Tracker.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="src\src\TrackerAssets\BossActionTracker.cpp">
+    <ClCompile Include="src\src\main.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="src\src\TrackerEvents\InstantaneousEvent.cpp">
+      <Filter>Archivos de origen\TrackerEvents</Filter>
+    </ClCompile>
+    <ClCompile Include="src\src\TrackerEvents\SamplingEvent.cpp">
+      <Filter>Archivos de origen\TrackerEvents</Filter>
+    </ClCompile>
+    <ClCompile Include="src\src\TrackerEvents\TimeBasedEvent.cpp">
+      <Filter>Archivos de origen\TrackerEvents</Filter>
+    </ClCompile>
+    <ClCompile Include="src\src\TrackerAssets\InstantaneousTracker.cpp">
       <Filter>Archivos de origen\TrackerAssets</Filter>
     </ClCompile>
-    <ClCompile Include="src\src\main.cpp">
+    <ClCompile Include="src\src\TrackerAssets\SamplingTracker.cpp">
+      <Filter>Archivos de origen\TrackerAssets</Filter>
+    </ClCompile>
+    <ClCompile Include="src\src\Utils\machineID.cpp">
+      <Filter>Archivos de origen\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\src\Utils\md5Hash.cpp">
+      <Filter>Archivos de origen\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\src\Utils\Utils.cpp">
+      <Filter>Archivos de origen\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\src\TrackerAssets\TimeBasedTracker.cpp">
+      <Filter>Archivos de origen\TrackerAssets</Filter>
+    </ClCompile>
+    <ClCompile Include="src\src\Chrono.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
   </ItemGroup>

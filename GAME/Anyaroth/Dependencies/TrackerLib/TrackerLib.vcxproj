@@ -19,34 +19,52 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\include\BossActionTracker.h" />
+    <ClInclude Include="src\include\Chrono.h" />
     <ClInclude Include="src\include\ConcurrentQueue.h" />
     <ClInclude Include="src\include\CSVSerializer.h" />
     <ClInclude Include="src\include\FilePersistence.h" />
+    <ClInclude Include="src\include\httplib.h" />
+    <ClInclude Include="src\include\InstantaneousEvent.h" />
+    <ClInclude Include="src\include\InstantaneousTracker.h" />
     <ClInclude Include="src\include\IPersistence.h" />
     <ClInclude Include="src\include\ISerializer.h" />
     <ClInclude Include="src\include\ITrackerAsset.h" />
     <ClInclude Include="src\include\JSONSerializer.h" />
-    <ClInclude Include="src\include\PlayerActionTracker.h" />
+    <ClInclude Include="src\include\machineID.h" />
+    <ClInclude Include="src\include\md5Hash.h" />
     <ClInclude Include="src\include\ProgressionEvent.h" />
     <ClInclude Include="src\include\ProgressionTracker.h" />
+    <ClInclude Include="src\include\SamplingEvent.h" />
+    <ClInclude Include="src\include\SamplingTracker.h" />
     <ClInclude Include="src\include\ServerPersistence.h" />
+    <ClInclude Include="src\include\TimeBasedEvent.h" />
+    <ClInclude Include="src\include\TimeBasedTracker.h" />
+    <ClInclude Include="src\include\Factory.h" />
+    <ClInclude Include="src\include\Utils.h" />
     <ClInclude Include="src\include\Tracker.h" />
     <ClInclude Include="src\include\TrackerExports.h" />
     <ClInclude Include="src\include\TrackerEvent.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\src\Chrono.cpp" />
     <ClCompile Include="src\src\main.cpp" />
     <ClCompile Include="src\src\Persistance\FilePersistence.cpp" />
     <ClCompile Include="src\src\Persistance\ServerPersistence.cpp" />
     <ClCompile Include="src\src\Serialization\CSVSerializer.cpp" />
     <ClCompile Include="src\src\Serialization\JSONSerializer.cpp" />
+    <ClCompile Include="src\src\TrackerAssets\InstantaneousTracker.cpp" />
+    <ClCompile Include="src\src\TrackerAssets\SamplingTracker.cpp" />
     <ClCompile Include="src\src\Tracker.cpp" />
-    <ClCompile Include="src\src\TrackerAssets\BossActionTracker.cpp" />
-    <ClCompile Include="src\src\TrackerAssets\PlayerActionTracker.cpp" />
     <ClCompile Include="src\src\TrackerAssets\ProgressionTracker.cpp" />
+    <ClCompile Include="src\src\TrackerAssets\TimeBasedTracker.cpp" />
+    <ClCompile Include="src\src\TrackerEvents\InstantaneousEvent.cpp" />
     <ClCompile Include="src\src\TrackerEvents\ProgressionEvent.cpp" />
+    <ClCompile Include="src\src\TrackerEvents\SamplingEvent.cpp" />
+    <ClCompile Include="src\src\TrackerEvents\TimeBasedEvent.cpp" />
     <ClCompile Include="src\src\TrackerEvents\TrackerEvent.cpp" />
+    <ClCompile Include="src\src\Utils\machineID.cpp" />
+    <ClCompile Include="src\src\Utils\md5Hash.cpp" />
+    <ClCompile Include="src\src\Utils\Utils.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -56,7 +74,7 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
@@ -71,13 +89,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -130,6 +148,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;TRACKER_CORE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)dependencies\json</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

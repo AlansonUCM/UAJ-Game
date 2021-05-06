@@ -65,7 +65,7 @@ Player::Player(Game* game) : GameObject(game, "Player")
 	//Brazo
 	_playerArm = new PlayerArm(game, this, { 28, 15 });
 	addChild(_playerArm);
-	
+
 	_currentGun = WeaponManager::getInstance()->getWeapon(game, Pistol_Weapon);
 
 	_playerArm->setTexture(_currentGun->getArmTexture());
@@ -86,7 +86,7 @@ Player::~Player()
 	if (_otherGun != nullptr) delete _otherGun;
 }
 
-void Player::beginCollision(GameObject * other, b2Contact* contact)
+void Player::beginCollision(GameObject* other, b2Contact* contact)
 {
 	auto fA = contact->GetFixtureA();
 	auto fB = contact->GetFixtureB();
@@ -104,16 +104,16 @@ void Player::beginCollision(GameObject * other, b2Contact* contact)
 		Tracker* tracker = Tracker::getInstance();
 
 		std::map<string, string> prop;
-		prop.insert(pair<string, string>("DamageReceive",to_string(damage)));
-		prop.insert(pair<string, string>("PlayerPos","X:"+to_string(_transform->getPosition().getX())+" Y:"+ to_string(_transform->getPosition().getY())));
-		int lvl=0;
-		
-			//LevelManager::Level lvl=
-			lvl = GameManager::getInstance()->getCurrentLevel();
-	
+		prop.insert(pair<string, string>("DamageReceived", to_string(damage)));
+		prop.insert(pair<string, string>("PlayerPos", "X:" + to_string(_transform->getPosition().getX()) + " Y:" + to_string(_transform->getPosition().getY())));
+		int lvl = 0;
+
+		//LevelManager::Level lvl=
+		lvl = GameManager::getInstance()->getCurrentLevel();
+
 		if (lvl == LevelManager::Level::Boss1 || lvl == LevelManager::Level::Boss2 || lvl == LevelManager::Level::Boss3)
 		{
-			if(other->getIdAttack()=="")
+			if (other->getIdAttack() == "")
 				prop.insert(pair<string, string>("BossAttackType", "Shoot"));
 			else
 				prop.insert(pair<string, string>("BossAttackType", other->getIdAttack()));
@@ -122,7 +122,7 @@ void Player::beginCollision(GameObject * other, b2Contact* contact)
 
 			tracker->trackInstantaneousEvent("PlayerHit", prop);
 		}
-		
+
 		BodyComponent* otherBody = other->getComponent<BodyComponent>();
 		_contactPoint = otherBody->getBody()->GetPosition() + b2Vec2(otherBody->getW() / 2, otherBody->getH() / 2);
 	}
@@ -149,16 +149,16 @@ void Player::beginCollision(GameObject * other, b2Contact* contact)
 			//int totalAmmo = _currentGun->getMaxClip() * value - (_currentGun->getClip() + _currentGun->getMagazine()) + _otherGun->getMaxClip() * value - (_otherGun->getClip() + _otherGun->getMagazine());
 			int totalAmmo = 0;
 			if (_currentGun != nullptr)
-			totalAmmo= _currentGun->getClip() + _currentGun->getMagazine();
+				totalAmmo = _currentGun->getClip() + _currentGun->getMagazine();
 			if (_otherGun != nullptr)
-			totalAmmo = totalAmmo + _otherGun->getClip() + _otherGun->getMagazine();
+				totalAmmo = totalAmmo + _otherGun->getClip() + _otherGun->getMagazine();
 
 			totalAmmo = -totalAmmo;
 
 			_currentGun->addAmmo(_currentGun->getMaxClip() * value);
 			_playerPanel->updateAmmoViewer(_currentGun->getClip(), _currentGun->getMagazine());
 
-			if (_otherGun != nullptr) _otherGun->addAmmo(_otherGun->getMaxClip()*value);
+			if (_otherGun != nullptr) _otherGun->addAmmo(_otherGun->getMaxClip() * value);
 
 			if (_currentGun != nullptr)
 				totalAmmo = totalAmmo + _currentGun->getClip() + _currentGun->getMagazine();
@@ -186,12 +186,12 @@ void Player::beginCollision(GameObject * other, b2Contact* contact)
 	}
 	else if (other->getTag() == "Death")
 	{
-	
+
 		die();
 	}
 }
 
-void Player::endCollision(GameObject * other, b2Contact* contact)
+void Player::endCollision(GameObject* other, b2Contact* contact)
 {
 	auto fA = contact->GetFixtureA();
 	auto fB = contact->GetFixtureB();
@@ -277,7 +277,7 @@ void Player::subLife(int damage)
 		prop.insert(pair<string, string>("LevelIndex", to_string(lvl)));
 		if (lvl == LevelManager::Level::Boss1 || lvl == LevelManager::Level::Boss2 || lvl == LevelManager::Level::Boss3)
 		{
-			
+
 		}
 		else {
 
@@ -295,7 +295,7 @@ void Player::subLife(int damage)
 				_anim->hurt();
 				_playerArm->hurt();
 				_spawnParticles = true;
-        
+
 				int rand = _game->random(0, 100);
 				if (rand > 80)
 					_game->getSoundManager()->playSFX("pain1");
@@ -341,7 +341,7 @@ bool Player::handleEvent(const SDL_Event& event)
 		}
 		else if ((event.type == SDL_MOUSEBUTTONDOWN && event.button.state == SDL_PRESSED))
 		{
-			if (event.button.button == SDL_BUTTON_LEFT )
+			if (event.button.button == SDL_BUTTON_LEFT)
 				_isShooting = true;
 			else if (event.button.button == SDL_BUTTON_RIGHT && !isMeleeing())
 				_isMeleeing = true;
@@ -368,7 +368,7 @@ bool Player::handleEvent(const SDL_Event& event)
 				swapGun();
 				break;
 			case SDL_CONTROLLER_BUTTON_RIGHTSTICK:
-				if(!isMeleeing())
+				if (!isMeleeing())
 					_isMeleeing = true;
 				break;
 			default:
@@ -381,7 +381,7 @@ bool Player::handleEvent(const SDL_Event& event)
 			{
 			case SDL_CONTROLLER_BUTTON_A:
 				_jJump = false;
-				 if (isJumping())
+				if (isJumping())
 					cancelJump();
 				break;
 			case SDL_CONTROLLER_BUTTON_X:
@@ -446,9 +446,16 @@ bool Player::handleEvent(const SDL_Event& event)
 
 void Player::update(double deltaTime)
 {
+	Tracker* tracker = Tracker::getInstance();
+
+	std::map<string, string> prop;
+	prop.insert(pair<string, string>("PlayerPos", "X:" + to_string(_transform->getPosition().getX()) + " Y:" + to_string(_transform->getPosition().getY())));
+
+	tracker->trackSamplingEvent("PlayerPosition", prop, true);
+
 	const Uint8* keyboard = SDL_GetKeyboardState(NULL);
 
-	if(isDead() && !GameManager::getInstance()->getChangeLevel() && _deathCD > 0)
+	if (isDead() && !GameManager::getInstance()->getChangeLevel() && _deathCD > 0)
 	{
 		_playerPanel->showDeathText(true);
 		_deathCD -= deltaTime;
@@ -463,7 +470,7 @@ void Player::update(double deltaTime)
 		double center_x = _body->getBody()->GetPosition().x + _body->getW() / 2, center_y = _body->getBody()->GetPosition().y + _body->getH() / 2;
 
 		Vector2D direction = Vector2D((_contactPoint.x - center_x), (center_y - _contactPoint.y));
-		ParticleManager::GetParticleManager()->CreateSpray(_game->getTexture("Blood"), Vector2D(_contactPoint.x*M_TO_PIXEL, _contactPoint.y*M_TO_PIXEL), direction, 4, 10, 30, 700, 5, 2);
+		ParticleManager::GetParticleManager()->CreateSpray(_game->getTexture("Blood"), Vector2D(_contactPoint.x * M_TO_PIXEL, _contactPoint.y * M_TO_PIXEL), direction, 4, 10, 30, 700, 5, 2);
 	}
 
 	checkMelee();
@@ -498,12 +505,12 @@ void Player::swapGun()
 	}
 }
 
-void Player::changeCurrentGun(Gun * gun)
+void Player::changeCurrentGun(Gun* gun)
 {
 	if (gun != nullptr)
 	{
-		 if ( _currentGun != nullptr) 
-			 delete _currentGun;
+		if (_currentGun != nullptr)
+			delete _currentGun;
 		_currentGun = gun;
 
 		_playerArm->setTexture(_currentGun->getArmTexture());
@@ -514,11 +521,11 @@ void Player::changeCurrentGun(Gun * gun)
 	}
 }
 
-void Player::changeOtherGun(Gun * gun)
+void Player::changeOtherGun(Gun* gun)
 {
 	if (gun != nullptr)
 	{
-		if (_otherGun != nullptr) 
+		if (_otherGun != nullptr)
 			delete _otherGun;
 		_otherGun = gun;
 	}
@@ -671,7 +678,7 @@ void Player::refreshCooldowns(double deltaTime)
 
 void Player::refreshDashCoolDown(double deltaTime)
 {
-	if (!_dashEnabled) 
+	if (!_dashEnabled)
 	{
 		_dashCD -= deltaTime;
 		if (_dashCD <= 0)
@@ -703,23 +710,23 @@ void Player::dashTimer(double deltaTime)
 			if (_anim->getCurrentAnim() == AnimatedSpriteComponent::Dash)
 			{
 				if (!_anim->isFlipped())
-					ParticleManager::GetParticleManager()->CreateSimpleParticle(_game->getTexture("DashTrail"), 1, Vector2D((_body->getBody()->GetPosition().x)*M_TO_PIXEL, (_body->getBody()->GetPosition().y)*M_TO_PIXEL), 0, 0, 120);
+					ParticleManager::GetParticleManager()->CreateSimpleParticle(_game->getTexture("DashTrail"), 1, Vector2D((_body->getBody()->GetPosition().x) * M_TO_PIXEL, (_body->getBody()->GetPosition().y) * M_TO_PIXEL), 0, 0, 120);
 				else
-					ParticleManager::GetParticleManager()->CreateSimpleParticle(_game->getTexture("DashTrailFlip"), 1, Vector2D((_body->getBody()->GetPosition().x)*M_TO_PIXEL, (_body->getBody()->GetPosition().y)*M_TO_PIXEL), 0, 0, 120);
+					ParticleManager::GetParticleManager()->CreateSimpleParticle(_game->getTexture("DashTrailFlip"), 1, Vector2D((_body->getBody()->GetPosition().x) * M_TO_PIXEL, (_body->getBody()->GetPosition().y) * M_TO_PIXEL), 0, 0, 120);
 			}
 			else if (_anim->getCurrentAnim() == AnimatedSpriteComponent::DashBack)
 			{
 				if (!_anim->isFlipped())
-					ParticleManager::GetParticleManager()->CreateSimpleParticle(_game->getTexture("DashBackTrail"), 1, Vector2D((_body->getBody()->GetPosition().x)*M_TO_PIXEL, (_body->getBody()->GetPosition().y)*M_TO_PIXEL), 0, 0, 120);
+					ParticleManager::GetParticleManager()->CreateSimpleParticle(_game->getTexture("DashBackTrail"), 1, Vector2D((_body->getBody()->GetPosition().x) * M_TO_PIXEL, (_body->getBody()->GetPosition().y) * M_TO_PIXEL), 0, 0, 120);
 				else
-					ParticleManager::GetParticleManager()->CreateSimpleParticle(_game->getTexture("DashBackTrailFlip"), 1, Vector2D((_body->getBody()->GetPosition().x)*M_TO_PIXEL, (_body->getBody()->GetPosition().y)*M_TO_PIXEL), 0, 0, 120);
+					ParticleManager::GetParticleManager()->CreateSimpleParticle(_game->getTexture("DashBackTrailFlip"), 1, Vector2D((_body->getBody()->GetPosition().x) * M_TO_PIXEL, (_body->getBody()->GetPosition().y) * M_TO_PIXEL), 0, 0, 120);
 			}
 			else
 			{
 				if (!_anim->isFlipped())
-					ParticleManager::GetParticleManager()->CreateSimpleParticle(_game->getTexture("DashDownTrail"), 1, Vector2D((_body->getBody()->GetPosition().x)*M_TO_PIXEL, (_body->getBody()->GetPosition().y)*M_TO_PIXEL), 0, 0, 120);
+					ParticleManager::GetParticleManager()->CreateSimpleParticle(_game->getTexture("DashDownTrail"), 1, Vector2D((_body->getBody()->GetPosition().x) * M_TO_PIXEL, (_body->getBody()->GetPosition().y) * M_TO_PIXEL), 0, 0, 120);
 				else
-					ParticleManager::GetParticleManager()->CreateSimpleParticle(_game->getTexture("DashDownTrailFlip"), 1, Vector2D((_body->getBody()->GetPosition().x)*M_TO_PIXEL, (_body->getBody()->GetPosition().y)*M_TO_PIXEL), 0, 0, 120);
+					ParticleManager::GetParticleManager()->CreateSimpleParticle(_game->getTexture("DashDownTrailFlip"), 1, Vector2D((_body->getBody()->GetPosition().x) * M_TO_PIXEL, (_body->getBody()->GetPosition().y) * M_TO_PIXEL), 0, 0, 120);
 			}
 			_dashParticleTime = 40;
 		}
@@ -756,10 +763,10 @@ void Player::move(const Vector2D& dir, double speed)
 	else
 		_body->getBody()->SetLinearVelocity(b2Vec2(dir.getX() * speed, _body->getBody()->GetLinearVelocity().y));
 
-	if (_floorCount > 0 && dir.getX()!=0 && _runningSpawnParticle<=0)
+	if (_floorCount > 0 && dir.getX() != 0 && _runningSpawnParticle <= 0)
 	{
 		_runningSpawnParticle = 40;
-		ParticleManager::GetParticleManager()->CreateFountain(_game->getTexture(_dustParticle), Vector2D((_body->getBody()->GetPosition().x+_body->getW() *-dir.getX())*M_TO_PIXEL, (_body->getBody()->GetPosition().y+_body->getH()*1.2)*M_TO_PIXEL),Vector2D(-dir.getX(),1),0,10/*spped*/,15,100,10, 100,3);
+		ParticleManager::GetParticleManager()->CreateFountain(_game->getTexture(_dustParticle), Vector2D((_body->getBody()->GetPosition().x + _body->getW() * -dir.getX()) * M_TO_PIXEL, (_body->getBody()->GetPosition().y + _body->getH() * 1.2) * M_TO_PIXEL), Vector2D(-dir.getX(), 1), 0, 10/*spped*/, 15, 100, 10, 100, 3);
 	}
 }
 
@@ -770,7 +777,7 @@ void Player::reload()
 	_game->getSoundManager()->playSFX("reload");
 }
 
-void Player::setPlayerPanel(PlayerPanel * p)
+void Player::setPlayerPanel(PlayerPanel* p)
 {
 	_playerPanel = p;
 
@@ -808,17 +815,17 @@ void Player::stopPlayer()
 	_body->getBody()->SetAngularVelocity(0);
 
 	_hasToReload = false,
-	_isShooting = false,
-	_isMeleeing = false,
-	_isDashing = false,
-	_onDash = false,
-	_dashDown = false,
-	_jJump = false,
-	_jShoot = false,
-	_jMoveLeft = false,
-	_jMoveDown = false,
-	_jMoveRight = false,
-	_jReleased = false;
+		_isShooting = false,
+		_isMeleeing = false,
+		_isDashing = false,
+		_onDash = false,
+		_dashDown = false,
+		_jJump = false,
+		_jShoot = false,
+		_jMoveLeft = false,
+		_jMoveDown = false,
+		_jMoveRight = false,
+		_jReleased = false;
 }
 
 void Player::dash(const Vector2D& dir)
@@ -864,10 +871,10 @@ void Player::jump()
 	setGrounded(false);
 	_timeToJump = 0.f;
 
-	_anim->playAnim(AnimatedSpriteComponent::BeforeJump); 
-	ParticleManager::GetParticleManager()->CreateSpray(_game->getTexture(_dustParticle), Vector2D((_body->getBody()->GetPosition().x+_body->getW()/2)*M_TO_PIXEL, (_body->getBody()->GetPosition().y + _body->getH())*M_TO_PIXEL), Vector2D(-1, 1), 10, 20, 20, 400, 10, 3);
-	ParticleManager::GetParticleManager()->CreateSpray(_game->getTexture(_dustParticle), Vector2D((_body->getBody()->GetPosition().x - _body->getW() / 2)*M_TO_PIXEL, (_body->getBody()->GetPosition().y + _body->getH())*M_TO_PIXEL), Vector2D(1, 1), 10, 20, 20, 400, 10, 3);
-  
+	_anim->playAnim(AnimatedSpriteComponent::BeforeJump);
+	ParticleManager::GetParticleManager()->CreateSpray(_game->getTexture(_dustParticle), Vector2D((_body->getBody()->GetPosition().x + _body->getW() / 2) * M_TO_PIXEL, (_body->getBody()->GetPosition().y + _body->getH()) * M_TO_PIXEL), Vector2D(-1, 1), 10, 20, 20, 400, 10, 3);
+	ParticleManager::GetParticleManager()->CreateSpray(_game->getTexture(_dustParticle), Vector2D((_body->getBody()->GetPosition().x - _body->getW() / 2) * M_TO_PIXEL, (_body->getBody()->GetPosition().y + _body->getH()) * M_TO_PIXEL), Vector2D(1, 1), 10, 20, 20, 400, 10, 3);
+
 	_game->getSoundManager()->playSFX("jump");
 }
 
@@ -889,12 +896,12 @@ void Player::stunPlayer()
 
 void Player::melee()
 {
-	if(_melee->isActive())
+	if (_melee->isActive())
 		_melee->endMelee();
 
 	_anim->playAnim(_meleeAnim);
 
-	_melee->meleeAttack(_body->getBody()->GetPosition().x* M_TO_PIXEL, _body->getBody()->GetPosition().y*M_TO_PIXEL, (_anim->isFlipped()) ? -1 : 1);
+	_melee->meleeAttack(_body->getBody()->GetPosition().x * M_TO_PIXEL, _body->getBody()->GetPosition().y * M_TO_PIXEL, (_anim->isFlipped()) ? -1 : 1);
 	_isMeleeing = false;
 
 	_game->getSoundManager()->playSFX("melee");
@@ -955,8 +962,8 @@ void Player::changeMelee(Melee* newMelee, int anim)
 	_meleeAnim = anim;
 }
 
-void Player::clearAmmo() 
-{ 
-	_currentGun->clearAmmo(); 
+void Player::clearAmmo()
+{
+	_currentGun->clearAmmo();
 	_playerPanel->updateAmmoViewer(_currentGun->getClip(), _currentGun->getMagazine());
 }

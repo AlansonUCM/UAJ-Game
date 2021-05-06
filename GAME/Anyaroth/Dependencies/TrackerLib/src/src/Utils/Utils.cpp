@@ -10,6 +10,7 @@ std::string Utils::getTime()
 	localtime_s(&timeInfo, &rawtime);
 
 	strftime(buffer, 80, "%d-%m-%Y %H-%M-%S", &timeInfo);
-	
-	return std::string(buffer);
+ 	std::string buf=std::string(buffer);
+
+	return buf;
 };

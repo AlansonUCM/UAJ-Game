@@ -1,0 +1,7 @@
+{
+    "persistence" : "FilePersistence",
+    "persistenceMode" : "Timed",
+    "timeRate" : 2.0,
+    "serializer" : "CSVSerializer",
+    "activeTrackers" : ["InstantaneousTracker", "SamplingTracker", "TimeBasedTracker", "ProgressionTracker"]
+}

@@ -7,7 +7,7 @@ int main(int argc, char* argv[])
 {
 	try
 	{
-		//_CrtSetBreakAlloc(1298);
+		_CrtSetBreakAlloc(1424);
 		//_CrtSetBreakAlloc(1427);
 		//_CrtSetBreakAlloc(1284);
 		Tracker* tracker = Tracker::getInstance();

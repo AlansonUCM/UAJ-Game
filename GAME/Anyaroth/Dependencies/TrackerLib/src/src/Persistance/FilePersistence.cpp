@@ -17,6 +17,9 @@ FilePersistence::FilePersistence()
 
 FilePersistence::~FilePersistence()
 {
+	
+	if (serializer != nullptr)
+		delete serializer;
 }
 
 void FilePersistence::init(const std::string& type, const std::string& mode, const double& timeRate)
@@ -34,7 +37,7 @@ void FilePersistence::init(const std::string& type, const std::string& mode, con
 
 	// Crea el archivo de trazas para esta sesion
 	// con nombre: fecha y hora
-	fileName = "logs/" + std::string(Utils::getTime()) + ".log";
+	fileName = "logs/" + Utils::getTime() + ".log";
 
 	logFile.open(fileName);
 	logFile.close();
@@ -81,6 +84,12 @@ void FilePersistence::update()
 	flush();
 
 	Chrono::stop();
+	while (!eventQueue.empty())
+	{
+		TrackerEvent* e = eventQueue.pop();
+		delete e;
+	}
+	
 	delete serializer;
 }
 

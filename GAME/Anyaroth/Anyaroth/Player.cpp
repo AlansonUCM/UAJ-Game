@@ -217,7 +217,9 @@ void Player::die()
 
 	}
 	prop.insert(pair<string, string>("LevelIndex", to_string(lvl)));
-	tracker->trackInstantaneousEvent("PlayerDeath", prop,true);
+
+	if (!isDead())
+		tracker->trackInstantaneousEvent("PlayerDeath", prop, true);
 
 	_isShooting = false;
 	_noDamage = true;

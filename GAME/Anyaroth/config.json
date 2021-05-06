@@ -2,6 +2,6 @@
     "persistence" : "FilePersistence",
     "persistenceMode" : "Timed",
     "timeRate" : 2.0,
-    "serializer" : "JSONSerializer",
+    "serializer" : "CSVSerializer",
     "activeTrackers" : ["InstantaneousTracker", "SamplingTracker", "TimeBasedTracker", "ProgressionTracker"]
 }

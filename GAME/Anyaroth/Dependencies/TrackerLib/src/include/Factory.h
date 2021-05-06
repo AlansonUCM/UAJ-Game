@@ -14,6 +14,7 @@ public:
 		createFunctions[name] = &createFunction<TChild>;
 	}
 
+
 	T* create(std::string name) {
 		auto it = createFunctions.find(name);
 		if (it != createFunctions.end())

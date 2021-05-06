@@ -30,12 +30,14 @@ private:
 	std::thread* thread;
 	void trackEvent(TrackerEvent* e);
 	void initFactories();
+	
 
 public:
 	Tracker();
 	virtual ~Tracker();
 
 	static Tracker* getInstance();
+	static void deleteInstance();
 
 	void init();
 	void init(std::string gameId, std::string userId);

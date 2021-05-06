@@ -161,10 +161,14 @@ void PlayState::update(double deltaTime)
 	{
 		Tracker* tracker = Tracker::getInstance();
 		std::map<string, string> prop;
-		int ammo = _player->getCurrentGun()->getClip() + _player->getCurrentGun()->getMagazine() + _player->getOtherGun()->getClip() + _player->getOtherGun()->getMagazine();
+		int ammo = 0;
+		if (_player->getCurrentGun() != nullptr)
+			ammo = _player->getCurrentGun()->getClip() + _player->getCurrentGun()->getMagazine();
+		if (_player->getOtherGun() != nullptr)
+			ammo = ammo + _player->getOtherGun()->getClip() + _player->getOtherGun()->getMagazine();
 		prop.insert(pair<string, string>("FinalAmmo", to_string(ammo)));
 		prop.insert(pair<string, string>("LevelId",to_string( gameManager->getCurrentLevel())));
-		tracker->trackInstantaneousEvent("EndLevel", prop);
+		tracker->trackInstantaneousEvent("EndLevel", prop,true);
 		gameManager->setChangeLevel(false);
 
 		if (_player->isDead())
@@ -206,7 +210,11 @@ void PlayState::update(double deltaTime)
 					_cutScene->play();
 			});
 		}
-		ammo = _player->getCurrentGun()->getClip() + _player->getCurrentGun()->getMagazine() + _player->getOtherGun()->getClip() + _player->getOtherGun()->getMagazine();
+		ammo = 0;
+		if(_player->getCurrentGun()!=nullptr)
+		ammo = _player->getCurrentGun()->getMaxClip() + _player->getCurrentGun()->getMaxMagazine();
+		if(_player->getOtherGun()!=nullptr)
+		ammo= ammo +_player->getOtherGun()->getMaxClip() + _player->getOtherGun()->getMaxMagazine();
 		std::map<string, string> prop2;
 		prop2.insert(pair<string, string>("InitalAmmo", to_string(ammo)));
 		prop2.insert(pair<string, string>("LevelId", to_string(gameManager->getCurrentLevel())));

@@ -35,19 +35,16 @@ std::string readJsonString(std::ifstream & json)
 {
 	char c;
 	std::string result;
-	//json >> c;
 	json >> c;
 	do
 	{
 		json >> c;
-		//result = c;
 		while (c != '"' && c != '\n' && !json.eof())
 		{
 			result += c;
 			json >> c;
 			
 		}
-		std::cout << result << std::endl;
 	} while (c != '"' && c != '\n' && !json.eof());
 	json >> c;
 	return result;
@@ -59,7 +56,7 @@ Tracker::Tracker()
 
 Tracker::~Tracker()
 {
-	delete instance;
+//	delete instance;
 }
 
 void Tracker::init()
@@ -88,63 +85,41 @@ void Tracker::init()
 
 			if (help == "persistence")
 			{
-				//file >> help;
 				persistenceType = readJsonString(file);
-				//persistenceType = help;
+				
 			}
 			else if (help == "persistenceMode")
 			{
-				//file >> help;
 				persistenceMode = readJsonString(file);
-				//persistenceMode = help;
 			}
 			else if (help == "timeRate")
 			{
-				
 				file >> timeRate;
 				file >> help;
-				//timeRate = help;
 			}
 			else if (help == "serializer")
 			{
-				//file >> help;
 				serializerType = readJsonString(file);
-				//timeRate = help;
 			}
 			else if (help == "activeTrackers")
 			{
-				//file >> help;
-				
 				file >> itChar;
 				while (help != ""&& !file.eof())
 				{
-					//file >> itChar;
 					help=readJsonString(file);
-					//help = itChar;
+					
 					if(help != "")
 					{
 						ITrackerAsset* tracker = trackersFactory.create(help);
 						if (tracker != nullptr)
 							activeTrackers.push_back(tracker);
 					}
-					std::cout << help << std::endl;
 				
 				}
 			}
 		}
 	}
 
-	/*std::string persistenceType = *j.find("persistence");
-	std::string persistenceMode = *j.find("persistenceMode");
-	double timeRate = *j.find("timeRate");
-	std::string serializerType = *j.find("serializer");
-	json activeTrackersJson = *j.find("activeTrackers");
-
-	for (json::iterator it = activeTrackersJson.begin(); it != activeTrackersJson.end(); ++it) {
-		ITrackerAsset* tracker = trackersFactory.create(*it);
-		if (tracker != nullptr)
-			activeTrackers.push_back(tracker);
-	}*/
 
 	// Inicializa sistema de persistencia y serializacion
 	persistenceObject = persistanceFactory.create(persistenceType);
@@ -168,9 +143,15 @@ void Tracker::init(std::string gameId, std::string userId)
 
 void Tracker::end()
 {
+	
 	persistenceObject->end();
 	thread->join();
-
+	delete persistenceObject;
+	while (activeTrackers.size() != 0)
+	{
+		delete activeTrackers.back();
+		activeTrackers.pop_back();
+	}
 	delete thread;
 }
 
@@ -274,10 +255,17 @@ void Tracker::initFactories()
 	persistanceFactory.registerType<ServerPersistence>("ServerPersistence");
 }
 
+
+
 Tracker* Tracker::getInstance()
 {
 	if (instance == nullptr)
 		instance = new Tracker();
 
 	return instance;
+}
+
+void Tracker::deleteInstance()
+{
+	delete instance;
 }

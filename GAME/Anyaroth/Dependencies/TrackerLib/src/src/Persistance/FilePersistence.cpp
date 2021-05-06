@@ -17,9 +17,7 @@ FilePersistence::FilePersistence()
 
 FilePersistence::~FilePersistence()
 {
-	
-	if (serializer != nullptr)
-		delete serializer;
+
 }
 
 void FilePersistence::init(const std::string& type, const std::string& mode, const double& timeRate)
@@ -45,7 +43,7 @@ void FilePersistence::init(const std::string& type, const std::string& mode, con
 
 void FilePersistence::end()
 {
-	
+
 	exit = true;
 }
 
@@ -84,12 +82,7 @@ void FilePersistence::update()
 	flush();
 
 	Chrono::stop();
-	while (!eventQueue.empty())
-	{
-		TrackerEvent* e = eventQueue.pop();
-		delete e;
-	}
-	
+
 	delete serializer;
 }
 
